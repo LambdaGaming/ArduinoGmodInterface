@@ -23,16 +23,14 @@ function Arduino_TimerTest( port )
 	end )
 end
 
-if DarkRP then
-	function Arduino_Lockdown( port )
-		local e = arduino.Begin( port )
-		timer.Create( "ArduinoLockdown", 0.1, 0, function()
-			local str = arduino.ReadString( e )
-			if isstring( str ) and string.find( str, "1" ) then
-				LocalPlayer():ConCommand( "say /lockdown" )
-				timer.Remove( "ArduinoLockdown" )
-				arduino.Close( e )
-			end
-		end )
-	end
+function Arduino_Lockdown( port )
+	local e = arduino.Begin( port )
+	timer.Create( "ArduinoLockdown", 0.1, 0, function()
+		local str = arduino.ReadString( e )
+		if isstring( str ) and string.find( str, "1" ) then
+			LocalPlayer():ConCommand( "say /lockdown" )
+			timer.Remove( "ArduinoLockdown" )
+			arduino.Close( e )
+		end
+	end )
 end
