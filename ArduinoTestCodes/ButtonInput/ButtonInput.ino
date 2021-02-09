@@ -14,11 +14,11 @@ void loop() {
   if ( buttonstate == LOW )
   {
     digitalWrite( LED_BUILTIN, LOW );
-    Serial.write( 0 );
+    Serial.write( "0" );
   }
   else
   {
     digitalWrite( LED_BUILTIN, HIGH );
-    Serial.write( 1 );
+    Serial.write( "1" );
   }
 }
