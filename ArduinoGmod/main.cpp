@@ -3,17 +3,16 @@
 
 #include "SerialPort.hpp"
 #include "Interface.h"
-#include <string>
 
 using namespace GarrysMod::Lua;
 
 /*
-	Arduino_Begin( String port )
+	arduino.Begin( String port )
 	Arguments:
 		port - Name of the port, usually something like COM3. If the COM port is larger than 9 then you will need to format it like this: \\\\.\\COM10
 	Returns:
 		UserData arduino - Instance of the arduino serial connection
-	Example: Arduino_Begin( "COM3" )
+	Example: arduino.Begin( "COM3" )
 */
 LUA_FUNCTION( Begin )
 {
@@ -26,13 +25,13 @@ LUA_FUNCTION( Begin )
 }
 
 /*
-	Arduino_WriteString( UserData arduino, String str )
+	arduino.WriteString( UserData arduino, String str )
 	Arguments:
 		arduino - Instance of an arduino serial connection
 		str - String to be sent to the Arduino
 	Returns:
 		Bool success - Whether or not the string was send successfully
-	Example: Arduino_WriteString( arduino, "Hello, World!" )
+	Example: arduino.WriteString( arduino, "Hello, World!" )
 */
 LUA_FUNCTION( WriteString )
 {
@@ -54,12 +53,12 @@ LUA_FUNCTION( WriteString )
 }
 
 /*
-	Arduino_ReadString( UserData arduino )
+	arduino.ReadString( UserData arduino )
 	Arguments:
 		arduino - Instance of an arduino serial connection
 	Returns:
 		String str - String containing the read data, or an empty string if the read failed
-	Example: Arduino_ReadString( arduino )
+	Example: arduino.ReadString( arduino )
 */
 LUA_FUNCTION( ReadString )
 {
@@ -79,12 +78,25 @@ LUA_FUNCTION( ReadString )
 	return 1;
 }
 
+LUA_FUNCTION( IsConnected )
+{
+	LUA->CheckType( 1, Type::UserData );
+	SerialPort* arduino = LUA->GetUserType<SerialPort>( 1, Type::UserData );
+	if ( arduino->isConnected() )
+	{
+		LUA->PushBool( true );
+		return 1;
+	}
+	LUA->PushBool( false );
+	return 1;
+}
+
 /*
-	Arduino_Close( UserData arduino )
+	arduino.Close( UserData arduino )
 	Arguments:
 		arduino - Instance of an arduino serial connection
 	Returns: None
-	Example: Arduino_Close( arduino )
+	Example: arduino.Close( arduino )
 */
 LUA_FUNCTION( Close )
 {
@@ -107,6 +119,8 @@ GMOD_MODULE_OPEN()
 			LUA->SetField( -2, "WriteString" );
 			LUA->PushCFunction( ReadString );
 			LUA->SetField( -2, "ReadString" );
+			LUA->PushCFunction( IsConnected );
+			LUA->SetField( -2, "IsConnected" );
 			LUA->PushCFunction( Close );
 			LUA->SetField( -2, "Close" );
 		LUA->SetField( -2,  "arduino" );
