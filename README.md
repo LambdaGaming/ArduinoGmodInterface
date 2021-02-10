@@ -1,2 +1,2 @@
-# ArduinoGmod
- WIP project that will eventually allow users to communicate with their Arduino via Garry's Mod.
+# Arduino Gmod Interface
+ Garry's Mod module that allows the game to communicate with Arduino microcontrollers, and vice versa.

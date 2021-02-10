@@ -58,7 +58,6 @@ LUA_FUNCTION( WriteString )
 		arduino - Instance of an arduino serial connection
 	Returns:
 		String str - String containing the read data, or an empty string if the read failed
-	Example: arduino.ReadString( arduino )
 */
 LUA_FUNCTION( ReadString )
 {
@@ -74,10 +73,17 @@ LUA_FUNCTION( ReadString )
 			return 1;
 		}
 	}
-	LUA->PushBool( false ); // Return false if read fails
+	LUA->PushString( "" ); // Return empty string if read fails
 	return 1;
 }
 
+/*
+	arduino.IsConnected( UserData arduino )
+	Arguments:
+		arduino - Instance of an arduino serial connection
+	Returns:
+		Bool connected - Whether or not the specified connection is available
+*/
 LUA_FUNCTION( IsConnected )
 {
 	LUA->CheckType( 1, Type::UserData );
@@ -96,7 +102,6 @@ LUA_FUNCTION( IsConnected )
 	Arguments:
 		arduino - Instance of an arduino serial connection
 	Returns: None
-	Example: arduino.Close( arduino )
 */
 LUA_FUNCTION( Close )
 {
