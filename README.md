@@ -12,7 +12,7 @@
 
 # FAQs
 ## Does this work on servers?
- Yes, you can rename the first part of the binary module from gmcl to gmsv and place it in the `lua/bin` folder of the server. Everything *should* work fine but that doesn't mean it will. Servers may get more support in the future but for now only client-side is officially supported.
+ Yes, you can rename the first part of the binary module from gmcl to gmsv and place it in the `lua/bin` folder of the server. Everything *should* work the same as the client version.
 
 ## Is support for Linux/Mac planned?
  Not currently, but that can change if there's a high enough demand for it.
