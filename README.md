@@ -1,5 +1,5 @@
 # Arduino Gmod Interface
- Garry's Mod module that allows the game to communicate with Arduino microcontrollers, and vice versa. This only contains the API for interfacing between the game and Arduino along with a few Arduino and Lua samples. This module does nothing on it's own.
+ Garry's Mod module that allows the game to communicate with Arduino microcontrollers, and vice versa using [SerialPort.](https://github.com/manashmandal/SerialPort) This only contains the API for interfacing between the game and Arduino along with a few Arduino and Lua samples. This module does nothing on it's own.
 
 # Installing
  1. Download the latest ArduinoGmod binary module from [here.](https://github.com/LambdaGaming/ArduinoGmodInterface/releases) Make sure you download the 32-bit version unless you're running the x86-64 branch.

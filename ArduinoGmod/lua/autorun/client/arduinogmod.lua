@@ -11,10 +11,10 @@ hook.Add( "InitPostEntity", "ArduinoGmodInit", ArduinoGmod_Init )
 	Simple function that reads and prints out the output of the specified Arduino.
 ]]
 function Arduino_Test( port )
-	local e = arduino.Begin( port )
-	local str = arduino.ReadString( e )
+	local ino = arduino.Begin( port )
+	local str = ino:ReadString()
 	print( str )
-	arduino.Close( e )
+	ino:Close()
 end
 
 --[[
@@ -25,13 +25,13 @@ end
 	initializing a new connection with every loop and causing insane lag/crashes.
 ]]
 function Arduino_Lockdown( port )
-	local e = arduino.Begin( port )
+	local ino = arduino.Begin( port )
 	timer.Create( "ArduinoLockdown", 0.1, 0, function()
-		local str = arduino.ReadString( e )
+		local str = ino:ReadString()
 		if isstring( str ) and string.find( str, "1" ) then
 			LocalPlayer():ConCommand( "say /lockdown" )
 			timer.Remove( "ArduinoLockdown" )
-			arduino.Close( e )
+			ino:Close()
 		end
 	end )
 end
