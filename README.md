@@ -15,10 +15,10 @@
  Yes, you can rename the first part of the binary module from gmcl to gmsv and place it in the `lua/bin` folder of the server. Everything *should* work the same as the client version.
 
 ## Is support for Linux/Mac planned?
- Not currently, but that can change if there's a high enough demand for it.
+ Not currently.
 
 ## Does this work on beta branches of the game?
- It works on the x86-64 branch. Other branches haven't been tested.
+ It works on the x86-64 branch in both 32-bit and 64-bit mode. Other branches haven't been tested but should work without issue.
 
 ## Will this work with my Arduino?
  It works with the Uno. Other types of boards haven't been tested, but most if not all should work as long as they have the ability to communicate through a serial port. The only board incompatibilities you should encounter while using this module should be from the code you write.

@@ -29,6 +29,48 @@ LUA_FUNCTION( Begin )
 }
 
 /*
+	Arduino:SetInputDelay( Int delay )
+	Description:
+		Sets the number of seconds before the next input can be sent to the virtual arduino.
+	Arguments:
+		delay - Delay amount in seconds
+	Returns:
+		None
+*/
+LUA_FUNCTION( SetInputDelay )
+{
+	LUA->CheckType( 2, Type::Number );
+	auto arduino = LUA->GetUserType<SerialPort>( 1, ArduinoTable );
+
+	if ( arduino->isConnected() )
+	{
+		arduino->InputDelay = LUA->GetNumber( 2 );
+	}
+	return 1;
+}
+
+/*
+	Arduino:SetOutputDelay( Int delay )
+	Description:
+		Sets the number of seconds before the next input can be sent to the physical arduino.
+	Arguments:
+		delay - Delay amount in seconds
+	Returns:
+		None
+*/
+LUA_FUNCTION( SetOutputDelay )
+{
+	LUA->CheckType( 2, Type::Number );
+	auto arduino = LUA->GetUserType<SerialPort>( 1, ArduinoTable );
+
+	if ( arduino->isConnected() )
+	{
+		arduino->OutputDelay = LUA->GetNumber( 2 );
+	}
+	return 1;
+}
+
+/*
 	Arduino:WriteString( String str )
 	Description:
 		Sends a string to the Arduino.
@@ -43,9 +85,28 @@ LUA_FUNCTION( WriteString )
 	LUA->CheckType( 2, Type::String );
 	auto arduino = LUA->GetUserType<SerialPort>( 1, ArduinoTable );
 	auto str = LUA->GetString( 2 );
+
+	LUA->PushSpecial( SPECIAL_GLOB );
+		LUA->GetField( -1, "CurTime" );
+		LUA->Call( 0, 1 );
+		auto curtime = LUA->GetNumber( -1 );
+	LUA->Pop( 3 );
+
 	if ( arduino->isConnected() )
 	{
+		if ( arduino->OutputDelay && arduino->OutputCooldown >= curtime )
+		{
+			LUA->PushBool( true );
+			return 1;
+		}
+
 		auto haswritten = arduino->writeSerialPort( str, DATA_LENGTH );
+
+		if ( arduino->OutputDelay )
+		{
+			arduino->OutputCooldown = curtime + arduino->OutputDelay;
+		}
+
 		if ( haswritten )
 		{
 			LUA->PushBool( true );
@@ -67,9 +128,28 @@ LUA_FUNCTION( ReadString )
 {
 	auto arduino = LUA->GetUserType<SerialPort>( 1, ArduinoTable );
 	char received[DATA_LENGTH];
+
+	LUA->PushSpecial( SPECIAL_GLOB );
+		LUA->GetField( -1, "CurTime" );
+		LUA->Call( 0, 1 );
+		auto curtime = LUA->GetNumber( -1 );
+	LUA->Pop( 3 );
+
 	if ( arduino->isConnected() )
 	{
+		if ( arduino->InputDelay && arduino->InputCooldown >= curtime )
+		{
+			LUA->PushBool( true );
+			return 1;
+		}
+
 		auto hasread = arduino->readSerialPort( received, DATA_LENGTH );
+
+		if ( arduino->InputDelay )
+		{
+			arduino->InputCooldown = curtime + arduino->InputDelay;
+		}
+
 		if ( hasread )
 		{
 			LUA->PushString( received );
@@ -122,6 +202,10 @@ GMOD_MODULE_OPEN()
 	ArduinoTable = LUA->CreateMetaTable( "Arduino" );
 	LUA->Push( -1 );
 		LUA->SetField( -2, "__index" );
+		LUA->PushCFunction( SetInputDelay );
+		LUA->SetField( -2, "SetInputDelay" );
+		LUA->PushCFunction( SetOutputDelay );
+		LUA->SetField( -2, "SetOutputDelay" );
 		LUA->PushCFunction( WriteString );
 		LUA->SetField( -2, "WriteString" );
 		LUA->PushCFunction( ReadString );
