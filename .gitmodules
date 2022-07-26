@@ -1,0 +1,4 @@
+[submodule "ArduinoGmod/gmod-module-base"]
+	path = ArduinoGmod/gmod-module-base
+	url = https://github.com/Facepunch/gmod-module-base
+	branch = development
