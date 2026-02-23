@@ -1,15 +1,4 @@
---Required to initialize the module. Using pcall here since it's an easy way of knowing whether or not the module successfully loaded.
-local function ArduinoGmod_Init()
-	if pcall( require, "arduinogmod" ) then
-		MsgC( Color( 0, 255, 255 ), "\nArduinoGmod module successfully loaded.\n" )
-	end
-end
-hook.Add( "InitPostEntity", "ArduinoGmodInit", ArduinoGmod_Init )
-
---[[
-	Arduino test:
-	Simple function that reads and prints out the output of the specified Arduino.
-]]
+--Reads and prints out the output of the specified Arduino.
 function Arduino_Test( port )
 	local ino = arduino.Begin( port )
 	local str = ino:ReadString()
