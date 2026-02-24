@@ -1,3 +1,6 @@
+// Writes a value based on a button state
+// The value can then be read by the virtual Arduino
+
 #define BAUD 9600
 #define INPIN 12
 
