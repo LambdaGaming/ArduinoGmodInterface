@@ -16,6 +16,12 @@ if SERVER then
 
 	function ENT:Setup( enabled, port, model, numfix, inputdelay, outputdelay )
 		self.Instance = arduino.Begin( port )
+		if !self.Instance:IsConnected() then
+			MsgC( Color( 255, 0, 0 ), "[Arduino] ERROR: Failed to initialize connection!" )
+			self:EmitSound( "buttons/button10.wav" )
+			self:Remove()
+			return
+		end
 		self.Enabled = tobool( enabled )
 		self.Port = port
 		self.NumFix = tobool( numfix )
