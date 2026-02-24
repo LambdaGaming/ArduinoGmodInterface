@@ -13,7 +13,8 @@ int ArduinoTable;
 	Description:
 		Initializes a new connection to the specified serial port.
 	Arguments:
-		port - Name of the port, usually something like COM3. If the COM port is larger than 9 then you will need to format it like this: \\\\.\\COM10
+		port - Name of the port, usually something like COM3. If the COM port is
+		larger than 9 then you will need to format it like this: \\\\.\\COM10
 	Returns:
 		UserData arduino - Instance of the arduino serial connection
 	Example: arduino.Begin( "COM3" )
@@ -101,7 +102,6 @@ LUA_FUNCTION( WriteString )
 		}
 
 		auto haswritten = arduino->writeSerialPort( str, DATA_LENGTH );
-
 		if ( arduino->OutputDelay )
 		{
 			arduino->OutputCooldown = curtime + arduino->OutputDelay;
@@ -144,7 +144,6 @@ LUA_FUNCTION( ReadString )
 		}
 
 		auto hasread = arduino->readSerialPort( received, DATA_LENGTH );
-
 		if ( arduino->InputDelay )
 		{
 			arduino->InputCooldown = curtime + arduino->InputDelay;
@@ -171,19 +170,15 @@ LUA_FUNCTION( ReadString )
 LUA_FUNCTION( IsConnected )
 {
 	auto arduino = LUA->GetUserType<SerialPort>( 1, ArduinoTable );
-	if ( arduino->isConnected() )
-	{
-		LUA->PushBool( true );
-		return 1;
-	}
-	LUA->PushBool( false );
+	LUA->PushBool( arduino->isConnected() );
 	return 1;
 }
 
 /*
 	Arduino:Close()
 	Description:
-		Closes the connection. Do not try to start a new connection on the same port without calling this on the old connection first, or else things will break!
+		Closes the connection. Do not try to start a new connection on the same port without calling
+		this on the old connection first, or else things will break!
 	Arguments: None
 	Returns: None
 */
