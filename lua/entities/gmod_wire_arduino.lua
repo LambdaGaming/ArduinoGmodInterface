@@ -38,7 +38,10 @@ if SERVER then
 			self:UpdateOverlay()
 		else
 			if self.Enabled then
-				self.Instance:WriteString( tostring( value ) )
+				local success = self.Instance:WriteString( tostring( value ) )
+				if !success then
+					MsgC( Color( 255, 0, 0 ), "[Arduino] ERROR: Failed to write string. Device not found.\n" )
+				end
 			end
 		end
 	end
